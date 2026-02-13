@@ -1,0 +1,3 @@
+playwright # remember to do `playwright install`
+beautifulsoup4
+pyyaml
