@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=68"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "dominospl-promo"
@@ -18,4 +18,4 @@ dependencies = [
 dominospl-promo = "cli:main"
 
 [project.urls]
-Homepage = "https://github.com/philornot/dominospl-promocje"
+Homepage = "https://github.com/TWOJ_USERNAME/dominospl-promocje"
