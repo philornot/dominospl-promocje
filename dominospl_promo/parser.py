@@ -66,8 +66,8 @@ def parse_promotions(html: str, debug: bool = False) -> list[dict]:
         List of promotion dicts.
     """
     soup = BeautifulSoup(html, "html.parser")
-    seen: set[tuple[str, float]] = set()
-    promos: list[dict] = []
+    # price -> shortest description seen so far
+    by_price: dict[float, str] = {}
 
     for div in soup.select("div"):
         text = div.get_text(" ", strip=True)
@@ -88,18 +88,13 @@ def parse_promotions(html: str, debug: bool = False) -> list[dict]:
                 print(f"[DEBUG] SKIP (not pizza): {text[:80]!r}")
             continue
 
-        description = text[:300]
-        key = (description, price)
-        if key in seen:
-            if debug:
-                print(f"[DEBUG] SKIP (duplicate): {text[:80]!r}")
-            continue
-        seen.add(key)
-
         if debug:
             print(f"[DEBUG] ACCEPT price={price}: {text[:80]!r}")
 
-        promos.append({"description": description, "price": price})
+        # Keep the shortest description for this price — most specific div.
+        if price not in by_price or len(text) < len(by_price[price]):
+            by_price[price] = text[:300]
 
+    promos = [{"description": desc, "price": price} for price, desc in by_price.items()]
     promos.sort(key=lambda x: x["price"])
     return promos
