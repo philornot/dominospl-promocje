@@ -18,4 +18,4 @@ dependencies = [
 dominospl-promo = "cli:main"
 
 [project.urls]
-Homepage = "https://github.com/TWOJ_USERNAME/dominospl-promocje"
+Homepage = "https://github.com/philornot/dominospl-promocje"
