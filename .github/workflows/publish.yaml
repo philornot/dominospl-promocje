@@ -20,8 +20,8 @@ jobs:
 
       - name: Build package
         run: |
-          pip install build
-          python -m build
+          pip install build setuptools wheel
+          python -m build --no-isolation
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
