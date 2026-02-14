@@ -1,9 +1,11 @@
 # dominospl_promo — Domino's Pizza promotion scraper
+[![PyPI](https://img.shields.io/pypi/v/dominospl-promo)](https://pypi.org/project/dominospl-promo/)
+[![License](https://img.shields.io/pypi/l/dominospl-promo)](LICENSE)
 
 Python library and CLI tool for fetching current pizza deals
 from [dominospizza.pl](https://www.dominospizza.pl/menu/promocje).
 
-> 🇵🇱 [Wersja polska (README.md)](README.md)
+> 🇵🇱 [Wersja polska (README.md)](https://github.com/philornot/dominospl-promocje/blob/master/README.md)
 
 ## Requirements
 

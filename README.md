@@ -1,9 +1,12 @@
 # dominospl_promo — skaner promocji Domino's Pizza
+[![PyPI](https://img.shields.io/pypi/v/dominospl-promo)](https://pypi.org/project/dominospl-promo/)
+[![License](https://img.shields.io/pypi/l/dominospl-promo)](LICENSE)
+
 
 Biblioteka Pythona i narzędzie CLI do pobierania aktualnych promocji pizzowych
 z [dominospizza.pl](https://www.dominospizza.pl/menu/promocje).
 
-> 🇬🇧 [English version (README-EN.md)](README-EN.md)
+> [English version (README-EN.md)](https://github.com/philornot/dominospl-promocje/blob/master/README-EN.md)
 
 ## Wymagania
 
