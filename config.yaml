@@ -1,0 +1,5 @@
+# Język komunikatów / UI language: pl, en
+language: "pl"
+
+# Tryb debugowania parsera / Parser debug mode
+debug: false

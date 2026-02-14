@@ -1,7 +1,0 @@
-address:
-  city: "Warszawa"
-  street: "Marszałkowska"
-  house_number: "10"
-
-user:
-  pizzas_wanted: 2
