@@ -18,7 +18,7 @@ _NON_PIZZA_KEYWORDS = re.compile(
 
 
 def _extract_price(text: str) -> float | None:
-    """Extract the primary offer price from a promotional text string.
+    """Extract the first plausible offer price from a promotional text string.
 
     Args:
         text: Raw promotional text.
@@ -32,19 +32,6 @@ def _extract_price(text: str) -> float | None:
         if value >= _MIN_PIZZA_PRICE:
             return value
     return None
-
-
-def _extract_pizza_count(text: str) -> int:
-    """Extract the number of pizzas mentioned in a promotional text.
-
-    Args:
-        text: Promotional text.
-
-    Returns:
-        Number of pizzas, defaulting to 1 if not found.
-    """
-    match = re.search(r"(\d+)\s*pizz", text, re.IGNORECASE)
-    return int(match.group(1)) if match else 1
 
 
 def _is_pizza_promo(text: str) -> bool:
@@ -66,12 +53,10 @@ def parse_promotions(html: str, debug: bool = False) -> list[dict]:
 
     Each dict contains:
         - ``description`` (str): Promotion text, truncated to 300 characters.
-        - ``price`` (float): Total price in PLN.
-        - ``pizzas`` (int): Number of pizzas in the deal.
-        - ``price_per_pizza`` (float): Price divided by pizza count.
+        - ``price`` (float): Price found in the promotion text, in PLN.
 
-    Results are sorted by ``price_per_pizza`` ascending. Duplicate
-    ``(price, pizzas)`` pairs are removed.
+    Results are sorted by ``price`` ascending. Duplicate ``(description, price)``
+    pairs are removed.
 
     Args:
         html: Rendered HTML from the Domino's promotions page.
@@ -81,7 +66,7 @@ def parse_promotions(html: str, debug: bool = False) -> list[dict]:
         List of promotion dicts.
     """
     soup = BeautifulSoup(html, "html.parser")
-    seen: set[tuple[float, int]] = set()
+    seen: set[tuple[str, float]] = set()
     promos: list[dict] = []
 
     for div in soup.select("div"):
@@ -92,7 +77,8 @@ def parse_promotions(html: str, debug: bool = False) -> list[dict]:
                 print(f"[DEBUG] SKIP (too long, {len(text)} chars): {text[:80]!r}")
             continue
 
-        if not _extract_price(text):
+        price = _extract_price(text)
+        if not price:
             if debug:
                 print(f"[DEBUG] SKIP (no valid price): {text[:80]!r}")
             continue
@@ -102,25 +88,18 @@ def parse_promotions(html: str, debug: bool = False) -> list[dict]:
                 print(f"[DEBUG] SKIP (not pizza): {text[:80]!r}")
             continue
 
-        price = _extract_price(text)
-        pizzas = _extract_pizza_count(text)
-        key = (price, pizzas)
-
+        description = text[:300]
+        key = (description, price)
         if key in seen:
             if debug:
-                print(f"[DEBUG] SKIP (duplicate {key}): {text[:80]!r}")
+                print(f"[DEBUG] SKIP (duplicate): {text[:80]!r}")
             continue
         seen.add(key)
 
         if debug:
-            print(f"[DEBUG] ACCEPT price={price} pizzas={pizzas}: {text[:80]!r}")
+            print(f"[DEBUG] ACCEPT price={price}: {text[:80]!r}")
 
-        promos.append({
-            "description": text[:300],
-            "price": price,
-            "pizzas": pizzas,
-            "price_per_pizza": round(price / pizzas, 2),
-        })
+        promos.append({"description": description, "price": price})
 
-    promos.sort(key=lambda x: x["price_per_pizza"])
+    promos.sort(key=lambda x: x["price"])
     return promos
